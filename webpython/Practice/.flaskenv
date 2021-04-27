@@ -1,2 +1,2 @@
-FLASK_APP=practice.py
+FLASK_APP=Practice.py
 FLASK_ENV=development
