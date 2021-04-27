@@ -12,10 +12,11 @@ def home():
 def new_student():
     return render_template('student.html')
 
-@app.route('/addrec', methods=['POST', 'GET'])
+@app.route('/addrec', methods=['POST'])
 def addrec():
+    con = sql.connect("database.db")
+    msg = "新增失敗"
     if request.method == 'POST':
-        msg = "新增失敗"
         try:
             nm = request.form['nm']
             addr = request.form['add']
@@ -30,17 +31,16 @@ def addrec():
 
                 con.commit()
                 msg = "新增成功"
-        #except:
-            #con.rollback()
-            #msg = "新增失敗"
+        except:
+            con.rollback()
 
-        finally:
-            return render_template("result.html", msg=msg)
-        con.close()
+    con.close()
+    return render_template("result.html", msg=msg)
+    
 
 @app.route('/list')
 def list():
-    con =  sql.connect("database.db")
+    con = sql.connect("database.db")
     con.row_factory = sql.Row
 
     cur = con.cursor()
