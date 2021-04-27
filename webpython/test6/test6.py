@@ -15,6 +15,7 @@ def new_student():
 @app.route('/addrec', methods=['POST', 'GET'])
 def addrec():
     if request.method == 'POST':
+        msg = "新增失敗"
         try:
             nm = request.form['nm']
             addr = request.form['add']
@@ -29,9 +30,9 @@ def addrec():
 
                 con.commit()
                 msg = "新增成功"
-        except:
-            con.rollback()
-            msg = "新增失敗"
+        #except:
+            #con.rollback()
+            #msg = "新增失敗"
 
         finally:
             return render_template("result.html", msg=msg)
