@@ -36,7 +36,7 @@ def addrec():
 
         finally:
             return render_template("result.html", msg=msg)
-            con.close()
+        con.close()
 
 @app.route('/list')
 def list():
