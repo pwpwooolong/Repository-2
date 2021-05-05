@@ -2,7 +2,7 @@
 import json
 import db
 import sqlite3 as sql
-from flask import Flask, request, render_template, url_for
+from flask import Flask, request, render_template
 
 DB = db.DatabaseDriver()
 
@@ -18,7 +18,7 @@ def failure_response(message, code=404):
 
 @app.route("/tasks/")
 def get_tasks():
-    return success_response(DB.get_all_tasks())
+     return success_response(DB.get_all_tasks())
 
 @app.route("/")
 def home():
@@ -29,23 +29,23 @@ def home():
 def new_student():
     return render_template('student.html')
 
-@app.route('/addrec', methods=['POST'])
+@app.route('/addrec', methods=['POST', 'GET'])
 def addrec():
-   con = sql.connect("database.db")
-   msg = "新增失敗"
    if request.method == 'POST':
-         try:
-            name = request.form['name']
-            addr = request.form['add']
-            city = request.form['city']
-            pin = request.form['pin']
-            DB.instert_task_table(name, addr, city, pin)
-            msg = "新增成功"
-         except:
-            con.rollback()
+      try:
+         name = request.form['name']
+         addr = request.form['addr']
+         city = request.form['city']
+         pin = request.form['pin']
+         DB.insert_task_table(name, addr, city, pin)
+         msg = "新增成功"
 
-   con.close()
-   return render_template("result.html", msg=msg)
+      except Exception as e:
+         print(e)
+         msg = "新增失敗"
+         
+      finally: 
+         return render_template("result.html", msg=msg)
     
 
 @app.route('/list')

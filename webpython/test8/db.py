@@ -9,7 +9,7 @@ class DatabaseDriver(object):
     處理資料庫的讀＆寫
     """
     def __init__(self):
-        self.conn = sqlite3.connect("todo.db", check_same_thread=False)
+        self.conn = sqlite3.connect("database.db", check_same_thread=False)
         self.create_task_table()
 
     def create_task_table(self):
