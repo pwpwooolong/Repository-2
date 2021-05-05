@@ -87,7 +87,43 @@ def delete_task(task_id):
    db.session.commit()
    return success_response(task.serialize())
 
+@app.route("/tasks/<int:task_id>/subtasks/", methods=["POST"])
+def create_subtask(task_id):
+   task = Task.query.filter_by(id=task_id).first()
+   if task is None:
+       return failure_response("Task not found!")
 
+   body = json.loads(request.data)
+   new_subtask = Subtask(
+       description=body.get('description'),
+       done=body.get('done'),
+       task_id=task_id
+   )
+
+   db.session.add(new_subtask)
+   db.session.commit()
+   return success_response(new_subtask.serialize())
+
+@app.route("/tasks/<int:task_id>/category/", methods=["POST"])
+def assign_category(task_id):
+   task = Task.query.filter_by(id=task_id).first()
+   if task is None:
+       return failure_response("Task not found!")
+  
+   body = json.loads(request.data)
+   description = body.get('description')
+   if description is None:
+       return failure_response("No description!")
+
+   category = Category.query.filter_by(description=description).first()
+   if category is None:
+       category = Category(
+           description = description,
+           color = body.get('color','purple') )  
+
+   task.categories.append(category)
+   db.session.commit()
+   return success_response(task.serialize())
 
 # @app.route("/tasks/")
 # def get_tasks():
